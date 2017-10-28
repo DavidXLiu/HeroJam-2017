@@ -46,7 +46,12 @@ public class Shovel : MonoBehaviour {
     {
         if (humanConnected != null)
         {
+            gameObject.GetComponent<Collider>().enabled = false;
             transform.position = humanConnected.transform.position + (humanConnected.transform.right *= distanceFromHuman);
+        }
+        else
+        {
+            gameObject.GetComponent<Collider>().enabled = true;
         }
     }
 
