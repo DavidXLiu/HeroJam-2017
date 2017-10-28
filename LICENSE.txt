@@ -1,0 +1,21 @@
+The following project utilizes a shader script that was originally created by AnomalousUnderdog.
+The script, which is a variant of the original Outlind Diffuse 3 script, can be found here: http://wiki.unity3d.com/index.php/Silhouette-Outlined_Diffuse
+The use of this script is for the selection of the "human characters" in the game.
+
+CHANGES TO ORIGINAL SCRIPT
+-------------------------------------
+
+
+CREATIVE COMMONS DETAILED ATTRIBUTION
+-------------------------------------
+Author: AnomalousUnderdog
+Copyright Notices: Not Supplied
+Title: Silhouette-Outlined Diffuse
+Notices Referring to Public License and Disclaimers: No Notices or Disclaimers
+URI Licensor: Copyright Notice not Referenced
+
+THE DEVELOPERS OF THIS GAME GIVE ALL CREDIBILITY FOR THE SCRIPT TO THE ORIGINAL CREATOR OF THE SCRIPT.
+THE SCRIPT IS MODIFIED TO PROVIDE A FUNCTION TO THE GAME AND IS UNDER NO MEANS MEANT TO INFRINGE ON THE CONTENT OF THE ORIGINAL OWNER.
+
+Creative Commons Attribution Share Alike: https://creativecommons.org/licenses/by-sa/3.0/ 
+Full License: https://creativecommons.org/licenses/by-sa/3.0/legalcode
