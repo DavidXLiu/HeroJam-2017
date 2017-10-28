@@ -1,0 +1,180 @@
+fileFormatVersion: 2
+guid: 2456b20f333a59a4c874077d44009ab5
+timeCreated: 1509214681
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Camera
+    100004: Cube
+    100006: head targ
+    100008: head targ.001
+    100010: head targ.001_end
+    100012: head targ_end
+    100014: Lamp
+    100016: Left arm targ
+    100018: Left arm targ.001
+    100020: Left arm targ.001_end
+    100022: Left arm targ_end
+    100024: left foot
+    100026: left foot_end
+    100028: left hand
+    100030: left hand_end
+    100032: left leg targ
+    100034: left leg targ.001
+    100036: left leg targ.001_end
+    100038: left leg targ_end
+    100040: left lower arm
+    100042: left shin
+    100044: left shin.001
+    100046: left shoulder
+    100048: Left Thigh
+    100050: Left Thigh.001
+    100052: left upper arm
+    100054: //RootNode
+    100056: neck
+    100058: neck_end
+    100060: right arm targ
+    100062: right arm targ.001
+    100064: right arm targ.001_end
+    100066: right arm targ_end
+    100068: right foot
+    100070: right foot_end
+    100072: right hand
+    100074: right hand_end
+    100076: right leg targ
+    100078: right leg targ.001
+    100080: right leg targ.001_end
+    100082: right leg targ_end
+    100084: right lower arm
+    100086: right shoulder
+    100088: right upper arm
+    100090: Spine
+    100092: Spine.001
+    100094: Spine.002
+    100096: Lamp.001
+    100098: Lamp.002
+    400000: Armature
+    400002: Camera
+    400004: Cube
+    400006: head targ
+    400008: head targ.001
+    400010: head targ.001_end
+    400012: head targ_end
+    400014: Lamp
+    400016: Left arm targ
+    400018: Left arm targ.001
+    400020: Left arm targ.001_end
+    400022: Left arm targ_end
+    400024: left foot
+    400026: left foot_end
+    400028: left hand
+    400030: left hand_end
+    400032: left leg targ
+    400034: left leg targ.001
+    400036: left leg targ.001_end
+    400038: left leg targ_end
+    400040: left lower arm
+    400042: left shin
+    400044: left shin.001
+    400046: left shoulder
+    400048: Left Thigh
+    400050: Left Thigh.001
+    400052: left upper arm
+    400054: //RootNode
+    400056: neck
+    400058: neck_end
+    400060: right arm targ
+    400062: right arm targ.001
+    400064: right arm targ.001_end
+    400066: right arm targ_end
+    400068: right foot
+    400070: right foot_end
+    400072: right hand
+    400074: right hand_end
+    400076: right leg targ
+    400078: right leg targ.001
+    400080: right leg targ.001_end
+    400082: right leg targ_end
+    400084: right lower arm
+    400086: right shoulder
+    400088: right upper arm
+    400090: Spine
+    400092: Spine.001
+    400094: Spine.002
+    400096: Lamp.001
+    400098: Lamp.002
+    4300000: Cube
+    9500000: //RootNode
+    13700000: Cube
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.2
+    meshCompression: 0
+    addColliders: 1
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

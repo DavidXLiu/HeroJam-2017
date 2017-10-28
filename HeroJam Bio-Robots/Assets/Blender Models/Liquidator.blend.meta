@@ -4,7 +4,69 @@ timeCreated: 1509157760
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Cube
+    100004: head_targ
+    100006: head_targ_001
+    100008: Left_arm_targ
+    100010: left_foot
+    100012: left_hand
+    100014: left_leg_targ
+    100016: left_leg_targ_001
+    100018: left_lower_arm
+    100020: left_shin
+    100022: left_shin_001
+    100024: left_shoulder
+    100026: Left_Thigh
+    100028: Left_Thigh_001
+    100030: left_upper_arm
+    100032: //RootNode
+    100034: neck
+    100036: right_arm_targ_001
+    100038: right_foot
+    100040: right_hand
+    100042: right_leg_targ
+    100044: right_leg_targ_001
+    100046: right_lower_arm
+    100048: right_shoulder
+    100050: right_upper_arm
+    100052: Spine
+    100054: Spine_001
+    100056: Spine_002
+    400000: Armature
+    400002: Cube
+    400004: head_targ
+    400006: head_targ_001
+    400008: Left_arm_targ
+    400010: left_foot
+    400012: left_hand
+    400014: left_leg_targ
+    400016: left_leg_targ_001
+    400018: left_lower_arm
+    400020: left_shin
+    400022: left_shin_001
+    400024: left_shoulder
+    400026: Left_Thigh
+    400028: Left_Thigh_001
+    400030: left_upper_arm
+    400032: //RootNode
+    400034: neck
+    400036: right_arm_targ_001
+    400038: right_foot
+    400040: right_hand
+    400042: right_leg_targ
+    400044: right_leg_targ_001
+    400046: right_lower_arm
+    400048: right_shoulder
+    400050: right_upper_arm
+    400052: Spine
+    400054: Spine_001
+    400056: Spine_002
+    4300000: Cube
+    7400000: Default Take
+    9500000: //RootNode
+    13700000: Cube
   materials:
     importMaterials: 1
     materialName: 0
