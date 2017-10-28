@@ -1,38 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/*
- * Class that describes my life
- */
-public class Waste : MonoBehaviour {
+
+public class Shovel : MonoBehaviour {
 
     public GameObject humanConnected;
     public float distanceFromHuman;
-    public float yPositionForDespawn;
 
     public bool selected;
     public bool selectionEnabled;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         selected = false;
         selectionEnabled = true;
-	}
+    }
 
     // Triggers on mouse click
     private void OnMouseDown()
     {
-        if(selectionEnabled)
+        if (selectionEnabled)
         {
             if (!selected)
             {
-                foreach (GameObject waste in GameObject.FindGameObjectsWithTag("Waste"))
-                {
-                    waste.GetComponent<Waste>().selected = false;
-                }
-                foreach(GameObject shovel in GameObject.FindGameObjectsWithTag("Shovel"))
+                foreach (GameObject shovel in GameObject.FindGameObjectsWithTag("Shovel"))
                 {
                     shovel.GetComponent<Shovel>().selected = false;
+                }
+                foreach(GameObject waste in GameObject.FindGameObjectsWithTag("Waste"))
+                {
+                    waste.GetComponent<Waste>().selected = false;
                 }
 
                 selected = true;
@@ -47,14 +44,9 @@ public class Waste : MonoBehaviour {
     // Update calls consecutively
     private void FixedUpdate()
     {
-        if(humanConnected != null)
+        if (humanConnected != null)
         {
-            transform.position = humanConnected.transform.position + (humanConnected.transform.forward *= distanceFromHuman);
-        }
-
-        if(transform.position.y <= yPositionForDespawn)
-        {
-            Destroy(gameObject);
+            transform.position = humanConnected.transform.position + (humanConnected.transform.right *= distanceFromHuman);
         }
     }
 

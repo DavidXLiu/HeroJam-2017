@@ -8,6 +8,7 @@ using UnityEngine;
 public class HumanMovement : MonoBehaviour {
 
     public GameObject target;
+    public GameObject attachedShovel;
     public GameObject edgeTrigger;
     public GameObject exit;
     public Vector3 startPosition;
@@ -22,6 +23,7 @@ public class HumanMovement : MonoBehaviour {
     public string currentState;
     public bool selected;
     public bool selectionEnabled;
+    public bool hasShovel;
 
     private int pickupFrameCounter;
     private int dropFrameCounter;
@@ -43,6 +45,7 @@ public class HumanMovement : MonoBehaviour {
         currentState = "Still";
         selected = false;
         selectionEnabled = true;
+        hasShovel = false;
     }
 
     // Update is called based on call from last frame
@@ -53,7 +56,7 @@ public class HumanMovement : MonoBehaviour {
         {
             selectionEnabled = true;
         }
-        if(currentState == "Find")
+        else if(currentState == "Find")
         {
             Find();
         }
@@ -83,6 +86,7 @@ public class HumanMovement : MonoBehaviour {
         }
         else if(currentState == "Return")
         {
+            Drop();
             Return();
 
             if(transform.position.x >= startPosition.x - 0.1f && transform.position.x <= startPosition.x + 0.1f
@@ -112,7 +116,7 @@ public class HumanMovement : MonoBehaviour {
                 exit.GetComponent<Exit>().selected = false;
                 currentState = "Return";
             }
-            else
+            else if(hasShovel)
             {
                 foreach (GameObject waste in GameObject.FindGameObjectsWithTag("Waste"))
                 {
@@ -128,21 +132,42 @@ public class HumanMovement : MonoBehaviour {
                     }
                 }
             }
+            else if(!hasShovel)
+            {
+                foreach (GameObject shovel in GameObject.FindGameObjectsWithTag("Shovel"))
+                {
+                    if(shovel.GetComponent<Shovel>().selected)
+                    {
+                        attachedShovel = shovel;
+                        currentState = "Find";
+                        selected = false;
+                        selectionEnabled = false;
+                        shovel.GetComponent<Shovel>().selected = false;
+                        shovel.GetComponent<Shovel>().selectionEnabled = false;
+                    }
+                }
+            }
         }
     }
 
     // Collision
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.gameObject == target && currentState == "Find")
+        if(collider.gameObject == attachedShovel && currentState == "Find" && !hasShovel)
         {
             currentState = "Pickup";
+            hasShovel = true;
             pickupFrameCounter = 0;
         }
         else if(collider.gameObject == edgeTrigger && currentState == "WalkToEdge")
         {
             currentState = "Drop";
             dropFrameCounter = 0;
+        }
+        else if (collider.gameObject == target && currentState == "Find" && hasShovel)
+        {
+            currentState = "Pickup";
+            pickupFrameCounter = 0;
         }
     }
 
@@ -175,16 +200,33 @@ public class HumanMovement : MonoBehaviour {
     // Method for sending the human to the target and starting the timer
     public void Find()
     {
-        Quaternion rotateQuaternion = Quaternion.LookRotation(target.transform.position - transform.position);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
+        if(hasShovel)
+        {
+            Quaternion rotateQuaternion = Quaternion.LookRotation(target.transform.position - transform.position);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
 
-        transform.Translate(Vector3.forward * moveSpeed);
+            transform.Translate(Vector3.forward * moveSpeed);
+        }
+        else
+        {
+            Quaternion rotateQuaternion = Quaternion.LookRotation(attachedShovel.transform.position - transform.position);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
+
+            transform.Translate(Vector3.forward * moveSpeed);
+        }
     }
 
     // Method for picking up the target
     public void Pickup()
     {
-        target.GetComponent<Waste>().humanConnected = gameObject;
+        if(hasShovel)
+        {
+            target.GetComponent<Waste>().humanConnected = gameObject;
+        }
+        else
+        {
+            attachedShovel.GetComponent<Shovel>().humanConnected = gameObject;
+        }
     }
 
     // Method for sending the human to throw away the waste off the edge
@@ -203,6 +245,12 @@ public class HumanMovement : MonoBehaviour {
         {
             target.GetComponent<Waste>().humanConnected = null;
             target.GetComponent<Rigidbody>().useGravity = true;
+        }
+        if(currentState == "Return" && attachedShovel != null)
+        {
+            attachedShovel = null;
+            attachedShovel.GetComponent<Shovel>().humanConnected = null;
+            attachedShovel.GetComponent<Shovel>().selectionEnabled = true;
         }
     }
 
