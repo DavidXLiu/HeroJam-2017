@@ -4,12 +4,17 @@ using UnityEngine;
 /*
  * MAKE SURE TO NAME THE TRIGGER FOR THE EDGE AS "EdgeTrigger"
  * MAKE SURE TO NAME THE EXIT FOR THE HUMANS AS "Exit"
+ * Waste must be tagged as "Waste"
+ * Shovels must be tagged as "Shovel"
+ * Leave triggers must be tagged as "LeaveTrigger"
+ * Leave triggers must be named in order with the number at the end of the name. Starts with 0
  */
 public class HumanMovement : MonoBehaviour {
 
     public GameObject target;
     public GameObject attachedShovel;
     public GameObject edgeTrigger;
+    public GameObject[] leaveTriggers;
     public GameObject exit;
     public Vector3 startPosition;
     public Time startTime;
@@ -20,11 +25,13 @@ public class HumanMovement : MonoBehaviour {
     public float moveSpeed;
     public float rotateSpeed;
 
+    public GameObject currentLeaveTrigger;
     public string currentState;
     public bool selected;
     public bool selectionEnabled;
     public bool hasShovel;
 
+    private GameObject[] tempArray;
     private int pickupFrameCounter;
     private int dropFrameCounter;
     private int leaveFrameCounter;
@@ -33,6 +40,19 @@ public class HumanMovement : MonoBehaviour {
 	void Start () {
         edgeTrigger = GameObject.Find("EdgeTrigger");
         exit = GameObject.Find("Exit");
+        leaveTriggers = GameObject.FindGameObjectsWithTag("LeaveTrigger");
+        tempArray = new GameObject[leaveTriggers.Length];
+        for(int i = 0; i < leaveTriggers.Length; i++)
+        {
+            for(int j = 0; j < leaveTriggers.Length; j++)
+            {
+                if(leaveTriggers[j].name.EndsWith(i.ToString()))
+                {
+                    tempArray[i] = leaveTriggers[j];
+                }
+            }
+        }
+        leaveTriggers = tempArray;
         if(edgeTrigger == null)
         {
             Debug.Log(gameObject.name + "'s Edge Trigger is null");
@@ -40,6 +60,10 @@ public class HumanMovement : MonoBehaviour {
         if(exit == null)
         {
             Debug.Log(gameObject.name + "'s Exit is null");
+        }
+        if(leaveTriggers.Length == 0)
+        {
+            Debug.Log(gameObject.name + " has no Leave Triggers");
         }
         startPosition = transform.position;
         currentState = "Still";
@@ -62,12 +86,19 @@ public class HumanMovement : MonoBehaviour {
         }
         else if(currentState == "Pickup")
         {
-            Pickup();
-
             pickupFrameCounter++;
             if(pickupFrameCounter >= pickupFrameTime)
             {
-                currentState = "WalkToEdge";
+                if(hasShovel)
+                {
+                    Pickup();
+                    currentState = "WalkToEdge";
+                }
+                else
+                {
+                    Pickup();
+                    currentState = "Still";
+                }
             }
         }
         else if(currentState == "WalkToEdge")
@@ -89,12 +120,25 @@ public class HumanMovement : MonoBehaviour {
             Drop();
             Return();
 
-            if(transform.position.x >= startPosition.x - 0.1f && transform.position.x <= startPosition.x + 0.1f
-                && transform.position.z >= startPosition.z - 0.1f && transform.position.z <= startPosition.z + 0.1f)
+            if(transform.position.x >= currentLeaveTrigger.transform.position.x - 0.1f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.1f
+                && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.1f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.1f)
             {
-                transform.position = startPosition;
-                currentState = "Leave";
-                leaveFrameCounter = 0;
+                if(leaveTriggers[leaveTriggers.Length - 1] == currentLeaveTrigger)
+                {
+                    currentState = "Leave";
+                    leaveFrameCounter = 0;
+                }
+                else
+                {
+                    for(int i = 0; i < leaveTriggers.Length; i++)
+                    {
+                        if(leaveTriggers[i] == currentLeaveTrigger)
+                        {
+                            currentLeaveTrigger = leaveTriggers[i + 1];
+                            break;
+                        }
+                    }
+                }
             }
         }
         else if(currentState == "Leave")
@@ -115,6 +159,7 @@ public class HumanMovement : MonoBehaviour {
                 selectionEnabled = false;
                 exit.GetComponent<Exit>().selected = false;
                 currentState = "Return";
+                currentLeaveTrigger = leaveTriggers[0];
             }
             else if(hasShovel)
             {
@@ -156,7 +201,6 @@ public class HumanMovement : MonoBehaviour {
         if(collider.gameObject == attachedShovel && currentState == "Find" && !hasShovel)
         {
             currentState = "Pickup";
-            hasShovel = true;
             pickupFrameCounter = 0;
         }
         else if(collider.gameObject == edgeTrigger && currentState == "WalkToEdge")
@@ -202,14 +246,14 @@ public class HumanMovement : MonoBehaviour {
     {
         if(hasShovel)
         {
-            Quaternion rotateQuaternion = Quaternion.LookRotation(target.transform.position - transform.position);
+            Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z) - transform.position);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
 
             transform.Translate(Vector3.forward * moveSpeed);
         }
         else
         {
-            Quaternion rotateQuaternion = Quaternion.LookRotation(attachedShovel.transform.position - transform.position);
+            Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(attachedShovel.transform.position.x, transform.position.y, attachedShovel.transform.position.z) - transform.position);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
 
             transform.Translate(Vector3.forward * moveSpeed);
@@ -226,6 +270,7 @@ public class HumanMovement : MonoBehaviour {
         else
         {
             attachedShovel.GetComponent<Shovel>().humanConnected = gameObject;
+            hasShovel = true;
         }
     }
 
@@ -248,16 +293,16 @@ public class HumanMovement : MonoBehaviour {
         }
         if(currentState == "Return" && attachedShovel != null)
         {
-            attachedShovel = null;
             attachedShovel.GetComponent<Shovel>().humanConnected = null;
             attachedShovel.GetComponent<Shovel>().selectionEnabled = true;
+            attachedShovel = null;
         }
     }
 
     // Method for returning the human back to starting position
     public void Return()
     {
-        Quaternion rotateQuaternion = Quaternion.LookRotation(startPosition - transform.position);
+        Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(currentLeaveTrigger.transform.position.x, transform.position.y, currentLeaveTrigger.transform.position.z) - transform.position);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
 
         transform.Translate(Vector3.forward * moveSpeed);

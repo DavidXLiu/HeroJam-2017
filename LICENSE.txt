@@ -4,7 +4,9 @@ The use of this script is for the selection of the "human characters" in the gam
 
 CHANGES TO ORIGINAL SCRIPT
 -------------------------------------
-
+ - Changed shader outline width
+ - Changed shader color
+ - Used for hovering over objects and selecting them
 
 CREATIVE COMMONS DETAILED ATTRIBUTION
 -------------------------------------
