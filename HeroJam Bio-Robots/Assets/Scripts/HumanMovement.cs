@@ -88,7 +88,7 @@ public class HumanMovement : MonoBehaviour {
         if(currentState == "Enter")
         {
             Enter();
-            GetComponent<Animator>().SetBool("walk", true);
+            GetComponent<Animator>().SetTrigger("Walk");
 
             if (transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
                 && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.25f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.25f)
@@ -114,15 +114,15 @@ public class HumanMovement : MonoBehaviour {
         else if(currentState == "Still")
         {
             selectionEnabled = true;
-            GetComponent<Animator>().SetBool("idle", true);
         }
         else if(currentState == "Find")
         {
             Find();
-            GetComponent<Animator>().SetBool("walk", true);
+            GetComponent<Animator>().SetTrigger("Walk");
         }
         else if(currentState == "Pickup")
         {
+            GetComponent<Animator>().SetTrigger("PickUp");
             pickupFrameCounter++;
             if(pickupFrameCounter >= pickupFrameTime)
             {
@@ -141,7 +141,7 @@ public class HumanMovement : MonoBehaviour {
         else if(currentState == "WalkToEdge")
         {
             WalkToEdge();
-            GetComponent<Animator>().SetBool("walk", true);
+            GetComponent<Animator>().SetTrigger("Walk");
         }
         else if(currentState == "Drop")
         {
@@ -157,7 +157,7 @@ public class HumanMovement : MonoBehaviour {
         {
             Drop();
             Return();
-            GetComponent<Animator>().SetBool("walk", true);
+            GetComponent<Animator>().SetTrigger("Walk");
 
             if (transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
                 && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.25f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.25f)
@@ -182,7 +182,6 @@ public class HumanMovement : MonoBehaviour {
         }
         else if(currentState == "Leave")
         {
-            GetComponent<Animator>().SetBool("idle", true);
             leaveFrameCounter++;
             if(leaveFrameCounter >= leaveFrameTime)
             {
@@ -208,7 +207,7 @@ public class HumanMovement : MonoBehaviour {
         {
             Drop();
             Rescuing();
-            GetComponent<Animator>().SetBool("walk", true);
+            GetComponent<Animator>().SetTrigger("Walk");
 
             if (transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
                 && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.25f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.25f)
@@ -232,12 +231,19 @@ public class HumanMovement : MonoBehaviour {
             }
         }
 
+        // Shovel animation
+        if(hasShovel)
+        {
+            GetComponent<Animator>().SetBool("HasShovel", true);
+        }
+
         //pass-out timer
         if (Time.time >= startTime + timeInterval && currentState != "Unconscious" && currentState != "Rescued" && currentState != "Rescuing" && currentState != "Leave")
         {
             currentState = "Unconscious";
             GameObject.Find("EventSystem").GetComponent<Score>().humansPoisoned++;
             selectionEnabled = true;
+            GetComponent<Animator>().SetTrigger("Pass out");
         }
 
         // Selected human and object
