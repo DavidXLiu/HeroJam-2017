@@ -92,6 +92,7 @@ public class HumanMovement : MonoBehaviour {
         else if(currentState == "Find")
         {
             Find();
+            GetComponent<Animator>().SetBool("walk", true);
         }
         else if(currentState == "Pickup")
         {
@@ -113,6 +114,7 @@ public class HumanMovement : MonoBehaviour {
         else if(currentState == "WalkToEdge")
         {
             WalkToEdge();
+            GetComponent<Animator>().SetBool("walk", true);
         }
         else if(currentState == "Drop")
         {
@@ -128,8 +130,9 @@ public class HumanMovement : MonoBehaviour {
         {
             Drop();
             Return();
+            GetComponent<Animator>().SetBool("walk", true);
 
-            if(transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
+            if (transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
                 && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.25f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.25f)
             {
                 if(leaveTriggers[leaveTriggers.Length - 1] == currentLeaveTrigger)
@@ -152,6 +155,7 @@ public class HumanMovement : MonoBehaviour {
         }
         else if(currentState == "Leave")
         {
+            GetComponent<Animator>().SetBool("idle", true);
             leaveFrameCounter++;
             if(leaveFrameCounter >= leaveFrameTime)
             {
@@ -177,6 +181,7 @@ public class HumanMovement : MonoBehaviour {
         {
             Drop();
             Rescuing();
+            GetComponent<Animator>().SetBool("walk", true);
 
             if (transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
                 && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.25f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.25f)
@@ -256,18 +261,17 @@ public class HumanMovement : MonoBehaviour {
         {
             foreach(GameObject human in GameObject.FindGameObjectsWithTag("Human"))
             {
-                if(human.GetComponent<HumanMovement>().selected && human != gameObject)
+                if (human.GetComponent<HumanMovement>().selected && human != gameObject && human.GetComponent<HumanMovement>().currentState != "Unconcscious")
                 {
                     attachedHuman = human;
-                    hasShovel = false;
                     human.GetComponent<HumanMovement>().attachedHuman = human;
-                    currentState = "Rescued";
-                    human.GetComponent<HumanMovement>().currentState = "Rescuing";
+                    human.GetComponent<HumanMovement>().currentState = "Find";
                     human.GetComponent<HumanMovement>().currentLeaveTrigger = human.GetComponent<HumanMovement>().leaveTriggers[0];
                     selected = false;
                     selectionEnabled = false;
                     human.GetComponent<HumanMovement>().selected = false;
                     human.GetComponent<HumanMovement>().selectionEnabled = false;
+                    human.GetComponent<HumanMovement>().Drop();
                 }
             }
         }
@@ -276,7 +280,12 @@ public class HumanMovement : MonoBehaviour {
     // Collision
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.gameObject == attachedShovel && currentState == "Find" && !hasShovel)
+        if(collider.gameObject == attachedHuman && currentState == "Find")
+        {
+            currentState = "Rescuing";
+            attachedHuman.GetComponent<HumanMovement>().currentState = "Rescued";
+        }
+        else if(collider.gameObject == attachedShovel && currentState == "Find" && !hasShovel)
         {
             currentState = "Pickup";
             pickupFrameCounter = 0;
@@ -326,7 +335,14 @@ public class HumanMovement : MonoBehaviour {
     // Method for sending the human to the target and starting the timer
     public void Find()
     {
-        if(hasShovel)
+        if(attachedHuman != null)
+        {
+            Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(attachedHuman.transform.position.x, transform.position.y, attachedHuman.transform.position.z) - transform.position);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
+
+            transform.Translate(Vector3.forward * moveSpeed);
+        }
+        else if(hasShovel)
         {
             Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z) - transform.position);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
@@ -379,6 +395,14 @@ public class HumanMovement : MonoBehaviour {
             attachedShovel.GetComponent<Shovel>().humanConnected = null;
             attachedShovel.GetComponent<Shovel>().selectionEnabled = true;
             attachedShovel = null;
+            hasShovel = false;
+        }
+        else if(attachedHuman != null)
+        {
+            attachedShovel.GetComponent<Shovel>().humanConnected = null;
+            attachedShovel.GetComponent<Shovel>().selectionEnabled = true;
+            attachedShovel = null;
+            hasShovel = false;
         }
     }
 

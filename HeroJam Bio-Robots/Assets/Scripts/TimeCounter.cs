@@ -25,7 +25,7 @@ public class TimeCounter : MonoBehaviour {
     {
         frameCounter++;
 
-        if(frameCounter >= 30)
+        if(frameCounter >= 60)
         {
             second++;
             frameCounter = 0;
