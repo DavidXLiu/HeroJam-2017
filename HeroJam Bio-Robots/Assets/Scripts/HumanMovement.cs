@@ -73,9 +73,11 @@ public class HumanMovement : MonoBehaviour {
         }
         startPosition = transform.position;
         currentState = "Still";
+        GetComponent<Animator>().SetBool("idle", true);
         selected = false;
         selectionEnabled = true;
         hasShovel = false;
+        GetComponent<Animator>().SetBool("HasShovel", false);
     }
 
     // Update is called based on call from last frame
@@ -85,6 +87,7 @@ public class HumanMovement : MonoBehaviour {
         if(currentState == "Still")
         {
             selectionEnabled = true;
+            GetComponent<Animator>().SetBool("idle", true);
         }
         else if(currentState == "Find")
         {
@@ -350,6 +353,7 @@ public class HumanMovement : MonoBehaviour {
         {
             attachedShovel.GetComponent<Shovel>().humanConnected = gameObject;
             hasShovel = true;
+            GetComponent<Animator>().SetBool("HasShovel", true);
         }
     }
 
