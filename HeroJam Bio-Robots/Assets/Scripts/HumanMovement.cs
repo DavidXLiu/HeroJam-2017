@@ -14,6 +14,7 @@ public class HumanMovement : MonoBehaviour {
 
     public GameObject target;
     public GameObject attachedShovel;
+    public GameObject attachedHuman;
     public GameObject edgeTrigger;
     public GameObject[] leaveTriggers;
     public GameObject exit;
@@ -26,6 +27,7 @@ public class HumanMovement : MonoBehaviour {
     public int leaveFrameTime;
     public float moveSpeed;
     public float rotateSpeed;
+    public float distanceFromHuman;
 
     public GameObject currentLeaveTrigger;
     public string currentState;
@@ -155,17 +157,57 @@ public class HumanMovement : MonoBehaviour {
         }
         else if (currentState == "Unconscious")
         {
+            Drop();
+        }
+        else if(currentState == "Rescued")
+        {
+            if (attachedHuman == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
+            transform.rotation = attachedHuman.transform.rotation;
+            transform.position = attachedHuman.transform.position + (attachedHuman.transform.forward *= distanceFromHuman);
+        }
+        else if(currentState == "Rescuing")
+        {
+            Drop();
+            Rescuing();
+
+            if (transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
+                && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.25f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.25f)
+            {
+                if (leaveTriggers[leaveTriggers.Length - 1] == currentLeaveTrigger)
+                {
+                    currentState = "Leave";
+                    leaveFrameCounter = 0;
+                    attachedHuman.GetComponent<HumanMovement>().currentState = "Leave";
+                    attachedHuman.GetComponent<HumanMovement>().leaveFrameCounter = 0;
+                }
+                else
+                {
+                    for (int i = 0; i < leaveTriggers.Length; i++)
+                    {
+                        if (leaveTriggers[i] == currentLeaveTrigger)
+                        {
+                            currentLeaveTrigger = leaveTriggers[i + 1];
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         //pass-out timer
-        if (Time.time >= startTime + timeInterval)
+        if (Time.time >= startTime + timeInterval && currentState != "Unconscious" && currentState != "Rescued" && currentState != "Rescuing")
         {
             currentState = "Unconscious";
+            selectionEnabled = true;
         }
 
         // Selected human and object
-        if(selected)
+        if(selected && currentState != "Unconscious")
         {
             if(exit.GetComponent<Exit>().selected)
             {
@@ -207,6 +249,25 @@ public class HumanMovement : MonoBehaviour {
                 }
             }
         }
+        else if(selected && currentState == "Unconscious")
+        {
+            foreach(GameObject human in GameObject.FindGameObjectsWithTag("Human"))
+            {
+                if(human.GetComponent<HumanMovement>().selected && human != gameObject)
+                {
+                    attachedHuman = human;
+                    hasShovel = false;
+                    human.GetComponent<HumanMovement>().attachedHuman = human;
+                    currentState = "Rescued";
+                    human.GetComponent<HumanMovement>().currentState = "Rescuing";
+                    human.GetComponent<HumanMovement>().currentLeaveTrigger = human.GetComponent<HumanMovement>().leaveTriggers[0];
+                    selected = false;
+                    selectionEnabled = false;
+                    human.GetComponent<HumanMovement>().selected = false;
+                    human.GetComponent<HumanMovement>().selectionEnabled = false;
+                }
+            }
+        }
     }
 
     // Collision
@@ -234,13 +295,17 @@ public class HumanMovement : MonoBehaviour {
     {
         if(selectionEnabled)
         {
-            if (!selected)
+            if (!selected && currentState != "Unconscious")
             {
                 foreach (GameObject human in GameObject.FindGameObjectsWithTag("Human"))
                 {
                     human.GetComponent<HumanMovement>().selected = false;
                 }
 
+                selected = true;
+            }
+            else if(!selected && currentState == "Unconscious")
+            {
                 selected = true;
             }
             else
@@ -305,7 +370,7 @@ public class HumanMovement : MonoBehaviour {
             target.GetComponent<Waste>().humanConnected = null;
             target.GetComponent<Rigidbody>().useGravity = true;
         }
-        if(currentState == "Return" && attachedShovel != null)
+        if((currentState == "Return" || currentState == "Rescuing" || currentState == "Unconscious") && attachedShovel != null)
         {
             attachedShovel.GetComponent<Shovel>().humanConnected = null;
             attachedShovel.GetComponent<Shovel>().selectionEnabled = true;
@@ -315,6 +380,14 @@ public class HumanMovement : MonoBehaviour {
 
     // Method for returning the human back to starting position
     public void Return()
+    {
+        Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(currentLeaveTrigger.transform.position.x, transform.position.y, currentLeaveTrigger.transform.position.z) - transform.position);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
+
+        transform.Translate(Vector3.forward * moveSpeed);
+    }
+
+    public void Rescuing()
     {
         Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(currentLeaveTrigger.transform.position.x, transform.position.y, currentLeaveTrigger.transform.position.z) - transform.position);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
