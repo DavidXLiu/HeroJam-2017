@@ -70,8 +70,11 @@ ModelImporter:
     7400006: ArmatureAction_002
     7400008: ArmatureAction_003
     7400010: ArmatureAction_004
+<<<<<<< HEAD
     7400012: ArmatureAction_006
     7400014: ArmatureAction_005
+=======
+>>>>>>> 76f7c31d71d88d97cde1f19a0adfd1b444fcd907
     9500000: //RootNode
     13700000: Cube
   materials:
