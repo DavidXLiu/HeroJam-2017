@@ -8,3 +8,23 @@ Cmd: preprocess
   insize=1784 outsize=1057 ok=1
 Cmd: preprocess
   insize=1774 outsize=1051 ok=1
+Cmd: preprocess
+  insize=1774 outsize=1051 ok=1
+Cmd: preprocess
+  insize=1784 outsize=1057 ok=1
+Cmd: preprocess
+  insize=1783 outsize=1056 ok=1
+Cmd: preprocess
+  insize=1773 outsize=1050 ok=1
+Cmd: preprocess
+  insize=1784 outsize=1057 ok=1
+Cmd: preprocess
+  insize=1774 outsize=1051 ok=1
+Cmd: preprocess
+  insize=1785 outsize=1058 ok=1
+Cmd: preprocess
+  insize=1775 outsize=1052 ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=1555 outsize=834 kw= pd=UNITY_ENABLE_REFLECTION_BUFFERS UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING UNITY_ENABLE_DETAIL_NORMALMAP SHADER_API_DESKTOP UNITY_COLORSPACE_GAMMA ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=1555 outsize=666 kw= pd=UNITY_ENABLE_REFLECTION_BUFFERS UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING UNITY_ENABLE_DETAIL_NORMALMAP SHADER_API_DESKTOP UNITY_COLORSPACE_GAMMA ok=1

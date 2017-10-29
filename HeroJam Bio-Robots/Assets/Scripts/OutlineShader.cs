@@ -42,11 +42,11 @@ public class OutlineShader : MonoBehaviour {
         {
             if (selected)
             {
-                gameObject.GetComponent<Renderer>().material.shader = selectedShader;
+                gameObject.GetComponentInChildren<Renderer>().material.shader = selectedShader;
             }
             else
             {
-                gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Diffuse");
+                gameObject.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Diffuse");
             }
         }
     }
@@ -58,12 +58,11 @@ public class OutlineShader : MonoBehaviour {
 
     private void OnMouseOver()
     {
-        Debug.Log("Hovered");
         hoveredOver = true;
 
         if(!selected && shaderEnabled)
         {
-            gameObject.GetComponent<Renderer>().material.shader = hoverShader;
+            gameObject.GetComponentInChildren<Renderer>().material.shader = hoverShader;
         }
     }
 
@@ -72,7 +71,7 @@ public class OutlineShader : MonoBehaviour {
         hoveredOver = false;
         if(!selected && shaderEnabled)
         {
-            gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Diffuse");
+            gameObject.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Diffuse");
         }
     }
 }

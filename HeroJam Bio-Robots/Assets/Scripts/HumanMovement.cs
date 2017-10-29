@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 /*
  * MAKE SURE TO NAME THE TRIGGER FOR THE EDGE AS "EdgeTrigger"
  * MAKE SURE TO NAME THE EXIT FOR THE HUMANS AS "Exit"
@@ -17,7 +18,8 @@ public class HumanMovement : MonoBehaviour {
     public GameObject[] leaveTriggers;
     public GameObject exit;
     public Vector3 startPosition;
-    public Time startTime;
+    public TextMesh timeText;
+    public float startTime;
     public float timeInterval;
     public int pickupFrameTime;
     public int dropFrameTime;
@@ -42,6 +44,8 @@ public class HumanMovement : MonoBehaviour {
         exit = GameObject.Find("Exit");
         leaveTriggers = GameObject.FindGameObjectsWithTag("LeaveTrigger");
         tempArray = new GameObject[leaveTriggers.Length];
+        startTime = Time.time;
+        timeText.text = GameObject.Find("Time").GetComponent<Text>().text.Substring(0, 8);
         for(int i = 0; i < leaveTriggers.Length; i++)
         {
             for(int j = 0; j < leaveTriggers.Length; j++)
@@ -120,8 +124,8 @@ public class HumanMovement : MonoBehaviour {
             Drop();
             Return();
 
-            if(transform.position.x >= currentLeaveTrigger.transform.position.x - 0.1f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.1f
-                && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.1f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.1f)
+            if(transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
+                && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.25f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.25f)
             {
                 if(leaveTriggers[leaveTriggers.Length - 1] == currentLeaveTrigger)
                 {
@@ -148,6 +152,16 @@ public class HumanMovement : MonoBehaviour {
             {
                 Destroy(gameObject);
             }
+        }
+        else if (currentState == "Unconscious")
+        {
+
+        }
+
+        //pass-out timer
+        if (Time.time >= startTime + timeInterval)
+        {
+            currentState = "Unconscious";
         }
 
         // Selected human and object
