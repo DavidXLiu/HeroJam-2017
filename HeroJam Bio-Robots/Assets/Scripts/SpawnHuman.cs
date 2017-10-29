@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
+ * Code by: David Liu
+ */
 public class SpawnHuman : MonoBehaviour {
 
     public GameObject human;

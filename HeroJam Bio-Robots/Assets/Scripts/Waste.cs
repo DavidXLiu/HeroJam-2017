@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 /*
  * Class that describes my life
+ * Code by: David Liu
  */
 public class Waste : MonoBehaviour {
 

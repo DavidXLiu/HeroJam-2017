@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+/*
+ * Code by: David Liu
+ */
 public class StartButton : MonoBehaviour {
 
 	// Use this for initialization

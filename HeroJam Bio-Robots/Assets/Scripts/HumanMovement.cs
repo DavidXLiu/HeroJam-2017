@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 /*
+ * Code by: David Liu, Tiger Louck
  * MAKE SURE TO NAME THE TRIGGER FOR THE EDGE AS "EdgeTrigger"
  * MAKE SURE TO NAME THE EXIT FOR THE HUMANS AS "Exit"
  * Waste must be tagged as "Waste"
