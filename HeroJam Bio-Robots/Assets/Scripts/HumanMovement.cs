@@ -72,19 +72,46 @@ public class HumanMovement : MonoBehaviour {
             Debug.Log(gameObject.name + " has no Leave Triggers");
         }
         startPosition = transform.position;
-        currentState = "Still";
+        currentState = "Enter";
         GetComponent<Animator>().SetBool("idle", true);
         selected = false;
-        selectionEnabled = true;
+        selectionEnabled = false;
         hasShovel = false;
         GetComponent<Animator>().SetBool("HasShovel", false);
+        currentLeaveTrigger = leaveTriggers[leaveTriggers.Length - 1];
     }
 
     // Update is called based on call from last frame
     private void FixedUpdate()
     {
         // State machine
-        if(currentState == "Still")
+        if(currentState == "Enter")
+        {
+            Enter();
+            GetComponent<Animator>().SetBool("walk", true);
+
+            if (transform.position.x >= currentLeaveTrigger.transform.position.x - 0.25f && transform.position.x <= currentLeaveTrigger.transform.position.x + 0.25f
+                && transform.position.z >= currentLeaveTrigger.transform.position.z - 0.25f && transform.position.z <= currentLeaveTrigger.transform.position.z + 0.25f)
+            {
+                if (leaveTriggers[0] == currentLeaveTrigger)
+                {
+                    currentState = "Still";
+                    selectionEnabled = true;
+                }
+                else
+                {
+                    for (int i = leaveTriggers.Length - 1; i >= 0; i--)
+                    {
+                        if (leaveTriggers[i] == currentLeaveTrigger)
+                        {
+                            currentLeaveTrigger = leaveTriggers[i - 1];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else if(currentState == "Still")
         {
             selectionEnabled = true;
             GetComponent<Animator>().SetBool("idle", true);
@@ -190,8 +217,6 @@ public class HumanMovement : MonoBehaviour {
                 {
                     currentState = "Leave";
                     leaveFrameCounter = 0;
-                    attachedHuman.GetComponent<HumanMovement>().currentState = "Leave";
-                    attachedHuman.GetComponent<HumanMovement>().leaveFrameCounter = 0;
                 }
                 else
                 {
@@ -208,9 +233,10 @@ public class HumanMovement : MonoBehaviour {
         }
 
         //pass-out timer
-        if (Time.time >= startTime + timeInterval && currentState != "Unconscious" && currentState != "Rescued" && currentState != "Rescuing")
+        if (Time.time >= startTime + timeInterval && currentState != "Unconscious" && currentState != "Rescued" && currentState != "Rescuing" && currentState != "Leave")
         {
             currentState = "Unconscious";
+            GameObject.Find("EventSystem").GetComponent<Score>().humansPoisoned++;
             selectionEnabled = true;
         }
 
@@ -264,7 +290,7 @@ public class HumanMovement : MonoBehaviour {
                 if (human.GetComponent<HumanMovement>().selected && human != gameObject && human.GetComponent<HumanMovement>().currentState != "Unconcscious")
                 {
                     attachedHuman = human;
-                    human.GetComponent<HumanMovement>().attachedHuman = human;
+                    human.GetComponent<HumanMovement>().attachedHuman = gameObject;
                     human.GetComponent<HumanMovement>().currentState = "Find";
                     human.GetComponent<HumanMovement>().currentLeaveTrigger = human.GetComponent<HumanMovement>().leaveTriggers[0];
                     selected = false;
@@ -385,7 +411,12 @@ public class HumanMovement : MonoBehaviour {
     // Method for dropping the waste
     public void Drop()
     {
-        if(target != null)
+        if(target != null && currentState == "Unconscious")
+        {
+            target.GetComponent<Waste>().humanConnected = null;
+            target.GetComponent<Waste>().selectionEnabled = true;
+        }
+        else if(target != null)
         {
             target.GetComponent<Waste>().humanConnected = null;
             target.GetComponent<Rigidbody>().useGravity = true;
@@ -399,10 +430,13 @@ public class HumanMovement : MonoBehaviour {
         }
         else if(attachedHuman != null)
         {
-            attachedShovel.GetComponent<Shovel>().humanConnected = null;
-            attachedShovel.GetComponent<Shovel>().selectionEnabled = true;
-            attachedShovel = null;
-            hasShovel = false;
+            if(hasShovel)
+            {
+                attachedShovel.GetComponent<Shovel>().humanConnected = null;
+                attachedShovel.GetComponent<Shovel>().selectionEnabled = true;
+                attachedShovel = null;
+                hasShovel = false;
+            }
         }
     }
 
@@ -416,6 +450,14 @@ public class HumanMovement : MonoBehaviour {
     }
 
     public void Rescuing()
+    {
+        Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(currentLeaveTrigger.transform.position.x, transform.position.y, currentLeaveTrigger.transform.position.z) - transform.position);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
+
+        transform.Translate(Vector3.forward * moveSpeed);
+    }
+
+    public void Enter()
     {
         Quaternion rotateQuaternion = Quaternion.LookRotation(new Vector3(currentLeaveTrigger.transform.position.x, transform.position.y, currentLeaveTrigger.transform.position.z) - transform.position);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateQuaternion, rotateSpeed);
