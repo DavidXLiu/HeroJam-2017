@@ -3,7 +3,7 @@
 Shader "Hover" {
 	Properties{
 		_OutlineColorHover("Outline Color", Color) = (1,1,0,1)
-		_OutlineHover("Outline width", Range(0.0, 0.03)) = 0.75
+		_OutlineHover("Outline width", Range(0.0, 0.03)) = 0.005
 	}
 
 		CGINCLUDE
@@ -60,9 +60,9 @@ Shader "Hover" {
 		Cull Front
 
 		// you can choose what kind of blending mode you want for the outline
-		//Blend SrcAlpha OneMinusSrcAlpha // Normal
+		Blend SrcAlpha OneMinusSrcAlpha // Normal
 		//Blend One One // Additive
-		Blend One OneMinusDstColor // Soft Additive
+		//Blend One OneMinusDstColor // Soft Additive
 		//Blend DstColor Zero // Multiplicative
 		//Blend DstColor SrcColor // 2x Multiplicative
 
